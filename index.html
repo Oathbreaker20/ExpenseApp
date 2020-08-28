@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Personal Expense</title>
+</head>
+<body>
+    <h1 id="headingTotal"></h1>
+    <div>
+        <input id="inputAmount" type="text">
+        <input id="inputDesc" type="text">
+        <button id="btnAddExpense">+</button>
+    </div>
+    <div id="expenseTable"></div>
+
+
+    <script>
+        //get the heading element
+        const headingEl = document.querySelector("#headingTotal");
+
+        //get the ref of input description
+        const inputDescEl = document.querySelector("#inputDesc");
+
+        //ref to input amount
+        let inputElement = document.querySelector("#inputAmount");
+
+        //get ref to table
+        const expenseTableEl = document.querySelector("#expenseTable");
+
+        //init value of expense is 0
+        let totalExpense = 0;
+
+        //set the heading element to total expense
+        headingEl.textContent = totalExpense;
+
+        //all expenses at one place
+        const allExpenses = [];
+
+        //onButtonClick add inputAmount to totalExpense
+        function addExpenseToTotal(){
+            //create object
+            const expenseItem = {};
+
+            //read value from inputDescEl
+            const textDesc = inputDescEl.value;
+
+            //read value from inputAmount
+            const textAmount = inputElement.value;
+
+            //convert it into number
+            const expense = parseInt(textAmount,10);
+
+            //add it to the object
+            expenseItem.desc = textDesc;
+            expenseItem.amount = expense;
+            allExpenses.push(expenseItem);
+
+            //add it to totalExpense
+            totalExpense = totalExpense + expense;
+            
+            //set the heading element to total expense
+            const someText = `Total: ${totalExpense}`;
+            headingEl.textContent = someText;
+
+            //looping array and updating div of table
+            const allExpenseHTML = allExpenses.map((item)=>{
+            return `<div>${item.amount} :: ${item.desc}</div>`
+            }).join("");
+
+            console.log(allExpenseHTML);
+            expenseTableEl.innerHTML = allExpenseHTML;
+
+        }
+
+        //Get ref of button
+        const element = document.querySelector("#btnAddExpense");
+        //Event Listener
+        element.addEventListener("click", addExpenseToTotal, false);
+
+    </script>
+</body>
+</html>
