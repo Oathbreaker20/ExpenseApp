@@ -78,7 +78,7 @@
         headingEl.textContent = totalExpense;
 
         //all expenses at one place
-        const allExpenses = [];
+        let allExpenses = [];
 
         //onButtonClick add inputAmount to totalExpense
         function addExpenseToTotal(){
@@ -104,14 +104,12 @@
             totalExpense = totalExpense + expense;
             
             //set the heading element to total expense
-            const someText = `Total: ${totalExpense}`;
-            headingEl.textContent = someText;
+            updateTotal();
 
             //looping array and updating div of table
-            const allExpenseHTML = allExpenses.map(item => createListItem(item));
-
-            const joinedHTML = allExpenseHTML.join('');
-            expenseTableEl.innerHTML = joinedHTML;
+            renderList(allExpenses);
+            inputElement.value = "";
+            inputDescEl.value = "";
         }
         
         //Get ref of button
@@ -120,11 +118,34 @@
         element.addEventListener("click", addExpenseToTotal, false);
 
         //Controller Functions
+
+        //Get Date String
         function getDateString(moment){
             return moment.toLocaleDateString('en-US',{year:'numeric', month:'long', day: 'numeric'})
         }
 
+        //Update Total if element is deleted
+        function updateTotal(){
+            const someText = `Total: ${totalExpense}`;
+            headingEl.textContent = someText;
+        }
+
+        //delete Item
+        function deleteItem(dateValue,amount){
+            const newArr = allExpenses.filter(expense => expense.moment.valueOf()!== dateValue);
+            totalExpense -= amount;
+            updateTotal();
+            allExpenses = newArr;
+            renderList(allExpenses);
+        }
+
         //View Layer
+        function renderList(arrOfList){
+            const allExpenseHTML = arrOfList.map(item => createListItem(item));
+            const joinedHTML = allExpenseHTML.join('');
+            expenseTableEl.innerHTML = joinedHTML;
+        }
+
         function createListItem({desc, amount, moment}){
             return `
                 <li class="list-group-item d-flex justify-content-between">
@@ -136,7 +157,10 @@
                         <span class="px-5">
                             ${amount} 
                         </span>
-                        <button type="button" class="btn btn-outline-danger btn-sm">
+                        <button
+                         type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          onclick="deleteItem(${moment.valueOf()},${amount})">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
