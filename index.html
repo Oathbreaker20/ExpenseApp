@@ -14,7 +14,7 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark">
-        <span class="navbar-brand mb-0 h1">Xpers</span>
+        <span class="navbar-brand mb-0 h1">Xpense App</span>
     </nav>
     <div class="container-fluid bg-light" style="min-height: 100vh">
         <h1 id="headingTotal"></h1>
@@ -97,6 +97,7 @@
             //add it to the object
             expenseItem.desc = textDesc;
             expenseItem.amount = expense;
+            expenseItem.moment = new Date();
             allExpenses.push(expenseItem);
 
             //add it to totalExpense
@@ -118,13 +119,18 @@
         //Event Listener
         element.addEventListener("click", addExpenseToTotal, false);
 
+        //Controller Functions
+        function getDateString(moment){
+            return moment.toLocaleDateString('en-US',{year:'numeric', month:'long', day: 'numeric'})
+        }
+
         //View Layer
-        function createListItem({desc, amount}){
+        function createListItem({desc, amount, moment}){
             return `
                 <li class="list-group-item d-flex justify-content-between">
                     <div class="d-flex flex-column">
                         ${desc}
-                        <small class="text-muted">30 August 2020</small>
+                        <small class="text-muted">${getDateString(moment)}</small>
                     </div>
                     <div>
                         <span class="px-5">
@@ -137,6 +143,8 @@
                 </li>
                 `;
         }
+
+        
 
     </script>
 </body>
