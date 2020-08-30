@@ -3,18 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script
+			defer
+			src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+			integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+			crossorigin="anonymous"
+	></script>
     <title>Personal Expense</title>
 </head>
 <body>
-    <h1 id="headingTotal"></h1>
-    <div>
-        <input id="inputAmount" type="text">
-        <input id="inputDesc" type="text">
-        <button id="btnAddExpense">+</button>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">Xpers</span>
+    </nav>
+    <div class="container-fluid bg-light" style="min-height: 100vh">
+        <h1 id="headingTotal"></h1>
+        <div class="jumbotron mt-4">
+            <div class="input-group mb-3">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="inputAmount"
+                    placeholder="Amount spent"
+                    aria-label="Amount spent"
+                    aria-describedby="spent in rupee"
+                />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="spent in rupee">₹</span>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="spent at">@</span>
+                </div>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="inputDesc"
+                    placeholder="spent On"
+                    aria-label="spent On"
+                    aria-describedby="spent at"
+                />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button" id="btnAddExpense">Add</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="list-group" id="expenseTable">
+
+            </ul>
+        </div>
     </div>
-    <div id="expenseTable"></div>
+    
 
 
     <script>
@@ -66,19 +107,36 @@
             headingEl.textContent = someText;
 
             //looping array and updating div of table
-            const allExpenseHTML = allExpenses.map((item)=>{
-            return `<div>${item.amount} :: ${item.desc}</div>`
-            }).join("");
+            const allExpenseHTML = allExpenses.map(item => createListItem(item));
 
-            console.log(allExpenseHTML);
-            expenseTableEl.innerHTML = allExpenseHTML;
-
+            const joinedHTML = allExpenseHTML.join('');
+            expenseTableEl.innerHTML = joinedHTML;
         }
-
+        
         //Get ref of button
         const element = document.querySelector("#btnAddExpense");
         //Event Listener
         element.addEventListener("click", addExpenseToTotal, false);
+
+        //View Layer
+        function createListItem({desc, amount}){
+            return `
+                <li class="list-group-item d-flex justify-content-between">
+                    <div class="d-flex flex-column">
+                        ${desc}
+                        <small class="text-muted">30 August 2020</small>
+                    </div>
+                    <div>
+                        <span class="px-5">
+                            ${amount} 
+                        </span>
+                        <button type="button" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </li>
+                `;
+        }
 
     </script>
 </body>
